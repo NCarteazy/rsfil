@@ -1,0 +1,551 @@
+export const DEFAULT_FILTER = `meta {
+    name = "ironman-sleek";
+    description = "A clean, ironman-focused loot filter. Organized around what actually matters to your account: alch value, supplies, uniques, and collection log slots.";
+}
+
+// ============================================================================
+//  COLOR PALETTE
+//  Cohesive, muted tones — each color means something.
+// ============================================================================
+#define MEGA       "#ffffff"   // white — ultra rares, the dream drops
+#define CHASE      "#5ce0d8"   // cyan — boss uniques you're grinding for
+#define ALCH_GOLD  "#f5c542"   // amber — high alch value (your GP source)
+#define SUPPLY     "#7ecc6a"   // soft green — herbs, seeds, useful consumables
+#define CLUE       "#b09cdb"   // lavender — clues and untradeables
+#define COINS_CLR  "#db5a5a"   // muted red — coins
+#define DIMMED     "#808080"   // gray — low priority, marginal pickups
+#define BG_DARK    "#991a1a1a" // semi-transparent dark background (AARRGGBB)
+
+// ============================================================================
+//  HELPER MACROS
+// ============================================================================
+
+#define MEGA_RARE(_name) rule (name:_name) {\\
+    textColor = MEGA;\\
+    borderColor = MEGA;\\
+    backgroundColor = BG_DARK;\\
+    showLootbeam = true;\\
+    lootbeamColor = MEGA;\\
+    notify = true;\\
+    showValue = true;\\
+    showDespawnTimer = true;\\
+    priority = 100;\\
+    sound = 4220;\\
+}
+
+#define UNIQUE(_name) rule (name:_name) {\\
+    textColor = CHASE;\\
+    borderColor = CHASE;\\
+    backgroundColor = BG_DARK;\\
+    showLootbeam = true;\\
+    lootbeamColor = CHASE;\\
+    showValue = true;\\
+    showDespawnTimer = true;\\
+    priority = 50;\\
+    notify = true;\\
+}
+
+#define SUPPLY_ITEM(_name) rule (name:_name) {\\
+    textColor = SUPPLY;\\
+    showDespawnTimer = true;\\
+}
+
+#define CLUE_ITEM(_name) rule (name:_name) {\\
+    textColor = CLUE;\\
+    borderColor = CLUE;\\
+    showDespawnTimer = true;\\
+    priority = 30;\\
+    notify = true;\\
+}
+
+// ============================================================================
+//  MODULE: Mega Rares
+//  White lootbeam + notification + sound. The screenshot drops.
+// ============================================================================
+
+/*@ define:module:mega_rares
+name: Mega Rares
+subtitle: The dream drops
+description: |
+    Ultra-rare drops that trigger a lootbeam, notification, and sound effect.
+    Pets, raid purples, 3rd age — anything worth screenshotting.
+*/
+
+/*@ define:input:mega_rares
+type: style
+label: Mega Rare Style
+*/
+#define VAR_MEGA_STYLE textColor="#FFFFFFFF" borderColor="#FFFFFFFF" backgroundColor="#991a1a1a" showLootbeam=true lootbeamColor="#FFFFFFFF" notify=true showValue=true showDespawnTimer=true priority=100
+
+/*@ define:input:mega_rares
+type: stringlist
+label: Additional Mega Rares
+*/
+#define VAR_EXTRA_MEGA_RARES []
+
+// Raid / endgame uniques
+MEGA_RARE("twisted bow")
+MEGA_RARE("scythe of vitur")
+MEGA_RARE("tumeken's shadow")
+MEGA_RARE("masori*")
+MEGA_RARE("torva*")
+MEGA_RARE("ancestral*")
+MEGA_RARE("kodai insignia")
+MEGA_RARE("dexterous prayer scroll")
+MEGA_RARE("arcane prayer scroll")
+MEGA_RARE("dragon claws")
+MEGA_RARE("elder maul")
+MEGA_RARE("dinhs bulwark")
+MEGA_RARE("avernic defender hilt")
+MEGA_RARE("justiciar*")
+MEGA_RARE("sanguinesti staff")
+MEGA_RARE("ghrazi rapier")
+MEGA_RARE("harmonised orb")
+MEGA_RARE("eldritch orb")
+MEGA_RARE("volatile orb")
+MEGA_RARE("inquisitor's*")
+MEGA_RARE("3rd age*")
+
+// Pets
+MEGA_RARE("pet *")
+MEGA_RARE("* pet")
+MEGA_RARE("olmlet")
+MEGA_RARE("lil' zik")
+MEGA_RARE("tumeken's guardian")
+MEGA_RARE("nexling")
+MEGA_RARE("smolcano")
+MEGA_RARE("phoenix")
+MEGA_RARE("jal-nib-rek")
+MEGA_RARE("ikkle hydra")
+MEGA_RARE("sraracha")
+MEGA_RARE("noon")
+MEGA_RARE("midnight")
+MEGA_RARE("vorki")
+MEGA_RARE("prince black dragon")
+MEGA_RARE("kalphite princess")
+MEGA_RARE("baby mole")
+MEGA_RARE("hellpuppy")
+MEGA_RARE("bloodhound")
+
+// User-added mega rares
+rule (name:VAR_EXTRA_MEGA_RARES) {
+    textColor = MEGA;
+    borderColor = MEGA;
+    backgroundColor = BG_DARK;
+    showLootbeam = true;
+    lootbeamColor = MEGA;
+    notify = true;
+    showValue = true;
+    showDespawnTimer = true;
+    priority = 100;
+    sound = 4220;
+}
+
+
+// ============================================================================
+//  MODULE: Boss Uniques
+//  Cyan highlight + lootbeam. Meaningful upgrades.
+// ============================================================================
+
+/*@ define:module:boss_uniques
+name: Boss Uniques
+subtitle: Endgame gear upgrades
+description: |
+    Boss-specific uniques and meaningful gear drops. Cyan highlight with lootbeam.
+    Covers GWD, slayer bosses, barrows, DKs, wildy bosses, Zulrah, Vorkath,
+    Corp, Nex, and DT2.
+*/
+
+/*@ define:input:boss_uniques
+type: style
+label: Boss Unique Style
+*/
+#define VAR_UNIQUE_STYLE textColor="#FF5ce0d8" borderColor="#FF5ce0d8" backgroundColor="#991a1a1a" showLootbeam=true lootbeamColor="#FF5ce0d8" showValue=true showDespawnTimer=true priority=50 notify=true
+
+/*@ define:input:boss_uniques
+type: stringlist
+label: Additional Boss Uniques
+*/
+#define VAR_EXTRA_UNIQUES []
+
+// GWD
+UNIQUE("bandos chestplate")
+UNIQUE("bandos tassets")
+UNIQUE("bandos boots")
+UNIQUE("armadyl helmet")
+UNIQUE("armadyl chestplate")
+UNIQUE("armadyl chainskirt")
+UNIQUE("saradomin sword")
+UNIQUE("armadyl crossbow")
+UNIQUE("saradomin's light")
+UNIQUE("staff of the dead")
+UNIQUE("zamorakian spear")
+UNIQUE("steam battlestaff")
+UNIQUE("godsword shard*")
+UNIQUE("*godsword")
+UNIQUE("*hilt")
+
+// Slayer bosses
+UNIQUE("abyssal whip")
+UNIQUE("abyssal dagger")
+UNIQUE("kraken tentacle")
+UNIQUE("trident of the seas")
+UNIQUE("uncharged trident")
+UNIQUE("pegasian crystal")
+UNIQUE("primordial crystal")
+UNIQUE("eternal crystal")
+UNIQUE("smouldering stone")
+UNIQUE("hydra's claw")
+UNIQUE("hydra leather")
+UNIQUE("hydra's eye")
+UNIQUE("hydra's fang")
+UNIQUE("hydra's heart")
+UNIQUE("brimstone ring")
+UNIQUE("jar of *")
+
+// Barrows
+UNIQUE("ahrim's*")
+UNIQUE("dharok's*")
+UNIQUE("guthan's*")
+UNIQUE("karil's*")
+UNIQUE("torag's*")
+UNIQUE("verac's*")
+
+// DKs / Wildy / misc
+UNIQUE("berserker ring")
+UNIQUE("archers ring")
+UNIQUE("seers ring")
+UNIQUE("warrior ring")
+UNIQUE("dragon axe")
+UNIQUE("dragon pickaxe")
+UNIQUE("dragon harpoon")
+UNIQUE("treasonous ring")
+UNIQUE("tyrannical ring")
+UNIQUE("ring of the gods")
+UNIQUE("malediction shard*")
+UNIQUE("odium shard*")
+UNIQUE("dark bow")
+UNIQUE("black mask")
+
+// Zulrah
+UNIQUE("tanzanite fang")
+UNIQUE("magic fang")
+UNIQUE("serpentine visage")
+UNIQUE("uncut onyx")
+
+// Vorkath
+UNIQUE("draconic visage")
+UNIQUE("skeletal visage")
+UNIQUE("dragonbone necklace")
+
+// Corp
+UNIQUE("spectral sigil")
+UNIQUE("arcane sigil")
+UNIQUE("elysian sigil")
+UNIQUE("holy elixir")
+
+// Nex
+UNIQUE("zaryte vambraces")
+UNIQUE("nihil horn")
+
+// DT2
+UNIQUE("chromium ingot")
+UNIQUE("virtus*")
+UNIQUE("ancient sceptre")
+UNIQUE("ring of shadows")
+UNIQUE("venator shard")
+UNIQUE("blood quartz")
+UNIQUE("ice quartz")
+UNIQUE("smoke quartz")
+UNIQUE("shadow quartz")
+
+// User-added uniques
+rule (name:VAR_EXTRA_UNIQUES) {
+    textColor = CHASE;
+    borderColor = CHASE;
+    backgroundColor = BG_DARK;
+    showLootbeam = true;
+    lootbeamColor = CHASE;
+    showValue = true;
+    showDespawnTimer = true;
+    priority = 50;
+    notify = true;
+}
+
+
+// ============================================================================
+//  MODULE: Clues & Untradeables
+//  Lavender — always want to see these.
+// ============================================================================
+
+/*@ define:module:clues_untradeables
+name: Clues & Untradeables
+subtitle: Collection log fuel
+description: |
+    Clue scrolls, keys, totems, and other untradeable drops you always
+    want to pick up. Lavender highlight with notification.
+*/
+
+/*@ define:input:clues_untradeables
+type: stringlist
+label: Additional Untradeables
+*/
+#define VAR_EXTRA_UNTRADEABLES []
+
+CLUE_ITEM("clue scroll (beginner)")
+CLUE_ITEM("clue scroll (easy)")
+CLUE_ITEM("clue scroll (medium)")
+CLUE_ITEM("clue scroll (hard)")
+CLUE_ITEM("clue scroll (elite)")
+CLUE_ITEM("clue scroll (master)")
+CLUE_ITEM("brimstone key")
+CLUE_ITEM("larran's key")
+CLUE_ITEM("crystal shard")
+CLUE_ITEM("ancient shard")
+CLUE_ITEM("dark totem*")
+CLUE_ITEM("totem of *")
+CLUE_ITEM("long bone")
+CLUE_ITEM("curved bone")
+CLUE_ITEM("ecumenical key")
+
+rule (name:VAR_EXTRA_UNTRADEABLES) {
+    textColor = CLUE;
+    borderColor = CLUE;
+    showDespawnTimer = true;
+    priority = 30;
+    notify = true;
+}
+
+
+// ============================================================================
+//  MODULE: Supplies
+//  Soft green — the ironman lifeblood.
+// ============================================================================
+
+/*@ define:module:supplies
+name: Supplies
+subtitle: Herbs, seeds, food, runes
+description: |
+    The items that keep an ironman running. Herbs, high-value seeds,
+    potions, food, runes, and ammunition. Soft green highlight.
+*/
+
+/*@ define:input:supplies
+type: stringlist
+label: Additional Supply Items
+*/
+#define VAR_EXTRA_SUPPLIES []
+
+// Herbs (grimy — the ones that matter)
+SUPPLY_ITEM("grimy ranarr weed")
+SUPPLY_ITEM("grimy snapdragon")
+SUPPLY_ITEM("grimy torstol")
+SUPPLY_ITEM("grimy toadflax")
+SUPPLY_ITEM("grimy kwuarm")
+SUPPLY_ITEM("grimy cadantine")
+SUPPLY_ITEM("grimy dwarf weed")
+SUPPLY_ITEM("grimy lantadyme")
+SUPPLY_ITEM("grimy avantoe")
+SUPPLY_ITEM("grimy irit leaf")
+
+// Seeds (high value)
+SUPPLY_ITEM("ranarr seed")
+SUPPLY_ITEM("snapdragon seed")
+SUPPLY_ITEM("torstol seed")
+SUPPLY_ITEM("palm tree seed")
+SUPPLY_ITEM("magic seed")
+SUPPLY_ITEM("dragonfruit tree seed")
+SUPPLY_ITEM("celastrus seed")
+SUPPLY_ITEM("redwood tree seed")
+SUPPLY_ITEM("hespori seed")
+
+// Potions & consumables
+SUPPLY_ITEM("prayer potion*")
+SUPPLY_ITEM("super restore*")
+SUPPLY_ITEM("saradomin brew*")
+SUPPLY_ITEM("ranging potion*")
+SUPPLY_ITEM("super combat potion*")
+SUPPLY_ITEM("stamina potion*")
+SUPPLY_ITEM("sanfew serum*")
+SUPPLY_ITEM("antivenom*")
+SUPPLY_ITEM("crushed nest")
+SUPPLY_ITEM("bird nest")
+SUPPLY_ITEM("coconut milk")
+SUPPLY_ITEM("wine of zamorak")
+SUPPLY_ITEM("snape grass")
+SUPPLY_ITEM("limpwurt root")
+SUPPLY_ITEM("white berries")
+SUPPLY_ITEM("potato cactus")
+SUPPLY_ITEM("mort myre fungus")
+SUPPLY_ITEM("volcanic ash")
+SUPPLY_ITEM("numulite")
+
+// Food
+SUPPLY_ITEM("anglerfish")
+SUPPLY_ITEM("dark crab")
+SUPPLY_ITEM("manta ray")
+SUPPLY_ITEM("shark")
+SUPPLY_ITEM("cooked karambwan")
+
+// Runes (bulk)
+SUPPLY_ITEM("death rune")
+SUPPLY_ITEM("blood rune")
+SUPPLY_ITEM("soul rune")
+SUPPLY_ITEM("wrath rune")
+SUPPLY_ITEM("law rune")
+SUPPLY_ITEM("nature rune")
+SUPPLY_ITEM("astral rune")
+
+// Ammo
+SUPPLY_ITEM("rune arrow")
+SUPPLY_ITEM("dragon arrow")
+SUPPLY_ITEM("dragonstone bolts*")
+SUPPLY_ITEM("ruby bolts*")
+SUPPLY_ITEM("diamond bolts*")
+SUPPLY_ITEM("onyx bolts*")
+
+rule (name:VAR_EXTRA_SUPPLIES) {
+    textColor = SUPPLY;
+    showDespawnTimer = true;
+}
+
+
+// ============================================================================
+//  MODULE: Coins
+//  Muted red, scaled by stack size.
+// ============================================================================
+
+/*@ define:module:coins
+name: Coins
+subtitle: Scaled by stack size
+description: |
+    Coin stacks get increasingly prominent display based on quantity.
+    100k+ gets a lootbeam, under 1k is dimmed.
+*/
+
+/*@ define:input:coins
+type: number
+label: Lootbeam Threshold
+*/
+#define VAR_COINS_BEAM_THRESHOLD 100000
+
+/*@ define:input:coins
+type: number
+label: Highlight Threshold
+*/
+#define VAR_COINS_HIGHLIGHT_THRESHOLD 10000
+
+rule (name:"coins" && quantity:>VAR_COINS_BEAM_THRESHOLD) {
+    textColor = COINS_CLR;
+    borderColor = COINS_CLR;
+    backgroundColor = BG_DARK;
+    showLootbeam = true;
+    lootbeamColor = COINS_CLR;
+    showValue = true;
+    priority = 40;
+}
+
+rule (name:"coins" && quantity:>VAR_COINS_HIGHLIGHT_THRESHOLD) {
+    textColor = COINS_CLR;
+    borderColor = COINS_CLR;
+    showValue = true;
+    priority = 20;
+}
+
+rule (name:"coins" && quantity:>1_000) {
+    textColor = COINS_CLR;
+    showValue = true;
+}
+
+rule (name:"coins") {
+    textColor = DIMMED;
+    showValue = true;
+}
+
+
+// ============================================================================
+//  MODULE: Alch Value Tiers
+//  HA-based — because that's your economy as an ironman.
+// ============================================================================
+
+/*@ define:module:alch_tiers
+name: Alch Value Tiers
+subtitle: HA-based item value
+description: |
+    Items tiered by their high alchemy value, since that's how ironmen
+    generate GP. Great alchs (10k+ HA) get full amber treatment,
+    decent alchs (1k+) get text color, marginal items are dimmed.
+*/
+
+/*@ define:input:alch_tiers
+type: number
+label: Great Alch Threshold (HA)
+*/
+#define VAR_ALCH_HIGH 10000
+
+/*@ define:input:alch_tiers
+type: number
+label: Decent Alch Threshold (HA)
+*/
+#define VAR_ALCH_MID 1000
+
+/*@ define:input:alch_tiers
+type: number
+label: Marginal Alch Threshold (HA)
+*/
+#define VAR_ALCH_LOW 300
+
+rule (haValue:>VAR_ALCH_HIGH) {
+    textColor = ALCH_GOLD;
+    borderColor = ALCH_GOLD;
+    backgroundColor = BG_DARK;
+    showValue = true;
+    showDespawnTimer = true;
+    priority = 15;
+}
+
+rule (haValue:>VAR_ALCH_MID) {
+    textColor = ALCH_GOLD;
+    showValue = true;
+    showDespawnTimer = true;
+}
+
+rule (haValue:>VAR_ALCH_LOW) {
+    textColor = DIMMED;
+    showValue = true;
+}
+
+
+// ============================================================================
+//  MODULE: Hide List
+//  Stuff ironmen never want cluttering the screen.
+// ============================================================================
+
+/*@ define:module:hide_list
+name: Hidden Items
+subtitle: Junk removal
+description: |
+    Items hidden by default. Common drops that are never worth picking up.
+    Add or remove items from the list to customize.
+*/
+
+/*@ define:input:hide_list
+type: stringlist
+label: Items to Hide
+*/
+#define VAR_ITEMS_TO_HIDE ["bones", "big bones", "babydragon bones", "ashes", "fiendish ashes", "vile ashes", "malicious ashes", "abyssal ashes", "infernal ashes", "iron arrow", "bronze arrow", "steel arrow", "iron bolts", "bronze bolts", "bronze javelin", "iron javelin", "steel javelin", "iron knife", "bronze knife", "iron dart", "bronze dart", "steel dart", "iron med helm", "bronze med helm", "iron full helm", "bronze full helm", "iron platebody", "bronze platebody", "iron platelegs", "bronze platelegs", "iron chainbody", "bronze chainbody", "iron kiteshield", "bronze kiteshield", "iron sword", "bronze sword", "iron scimitar", "bronze scimitar", "iron mace", "bronze mace", "iron dagger", "bronze dagger", "iron axe", "bronze axe", "leather gloves", "leather boots", "leather body", "leather chaps", "cowhide", "thread", "needle", "hammer", "chisel", "tinderbox", "jug", "jug of water", "pot", "pot of flour", "bucket", "bucket of water", "rope", "cabbage", "onion", "potato", "grain", "eye of newt"]
+
+rule (name:VAR_ITEMS_TO_HIDE) {
+    hidden = true;
+}
+
+
+// ============================================================================
+//  FALLBACK — anything unmatched
+//  Dim gray, no frills. Visible but won't distract.
+// ============================================================================
+
+rule () {
+    textColor = DIMMED;
+}
+`;
